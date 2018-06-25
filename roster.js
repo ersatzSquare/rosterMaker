@@ -70,22 +70,28 @@ baseChars=[
     ["Ridley","65"],
     ["RANDOM","999"]
     ]
+
+    function clearAll(){
+        localStorage.myChars= JSON.stringify([]);
+        render();
+    }
     
     roster = document.getElementById("canvas").getContext('2d');
     chars= baseChars.map(char=>makeChar.apply(this,char))        
     xChars=9;
     j=0;
-    var grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
-    grd.addColorStop(0,"yellow");
-    grd.addColorStop(1,"DodgerBlue");
     newName=""
     newURL=""
     newI=0
-    newEcho=false
-    defWidth= canvas.width/xChars;
-    defHeight= (defWidth/16)*9
-    showOrder=false;
+    defWidth=0
+    defHeight=0
+    grd=0   
     setNewName("");
+    newEcho=false
+    showOrder=false
+    resetNew();
+    setXChars(9);
+    setResolution(1600,900);
     
 
     function makeChar(name,order){
@@ -111,29 +117,31 @@ baseChars=[
         render()
     }
 
-    $("#addChar").on("show.bs.modal", x => {$('#my-cropper').cropit({width:defWidth,height:defHeight,imageBackground:true, imageBackgroundBorderWidth: 15})} )
+    $("#addChar").on("show.bs.modal", x => {drawTest();$('#my-cropper').cropit({width:defWidth,height:defHeight,freeMove:true,smallImage:"allow",imageBackground:true, imageBackgroundBorderWidth: 15})} )
     $("#addChar").on("hide.bs.modal", x => {
         resetNew();
         $('.cropit-preview-image').removeAttr('src');
         $('.cropit-preview-background').removeAttr('src');
     })
     
-
-    setXChars(9);
-
     function addChar(){
         name=newName
         url=newURL
         i=newI;
         echo=newEcho;
+        visible=newVisible;
         if (localStorage.myChars) {
             temp = JSON.parse(localStorage.myChars);
-            temp=temp.filter( char=>char.name!=name)
-            temp.push({name:name,order:i,image: url, render:true,echo:echo })
-            localStorage.myChars=JSON.stringify(temp)
+            old= temp.find(char=> char.name==name)
+            console.log(old) 
+            aux=temp.filter( char=>char.name!=name)
+            newImage= url?url:(old?old.image:"")
+            console.log("URL: "+url.substring(1,6)+" And "+((old!=undefined)?"there was":"there wasn't")+" an older version, so Image will now be:"+newImage)
+            aux.push({name:name,order:i,image: newImage, render:visible,echo:echo })
+            localStorage.myChars=JSON.stringify(aux)
         } else {
             temp = [];
-            temp.push({name:name,order:i,image: url, render:true,echo:echo })
+            temp.push({name:name,order:i,image: url, render:visible,echo:echo })
             localStorage.myChars=JSON.stringify(temp)
         }
         resetNew();
@@ -167,9 +175,11 @@ baseChars=[
             elem.className="dropdown-item"
             elem.onclick= (() => {
                 $("#addChar").modal({show:true})
+                $("#newName").val(char.name)
                 setNewName(char.name)
                 setNewI(char.order)
                 setNewEcho(char.echo)
+                setNewVisible(char.render)
             })
             dropdown.appendChild(elem)
             })
@@ -180,10 +190,11 @@ baseChars=[
         setChars();
         roster.clearRect(0,0,canvas.width,canvas.height);
         roster.beginPath();
-        roster.stroke(); 
+        roster.stroke();
+        defFont=()=> " 900 "+defWidth/12+"px arial,sans-serif"
         defWidth= canvas.width/xChars;
         defHeight= (defWidth/16)*9
-        roster.font= " 900 "+(16+(8-xChars))+"px arial,sans-serif"
+        roster.font= defFont()
         myChars=JSON.parse(localStorage.myChars)
         totChars=chars.concat(myChars)
         totChars.filter(char=>char.render).sort( (a,b)=> a.order-b.order).forEach(draw)
@@ -192,7 +203,9 @@ baseChars=[
     function draw (char,i){
         roster.strokeStyle="black";
         startX=(i%xChars)*defWidth
-        if(Math.floor(i/xChars)==Math.floor(totChars.length/xChars)) startX+= (defWidth* (xChars-(totChars.length%xChars)))/2
+        if(Math.floor(i/xChars)==Math.floor(totChars.length/xChars)){
+            startX += ( defWidth * ( xChars - (totChars.length%xChars) ) ) / 2
+        }
         startY=Math.floor(i/xChars)*defHeight
         roster.fillStyle= char.name=="RANDOM"?"#D3D3D3":grd
         roster.fillRect(startX,startY,defWidth,defHeight)
@@ -213,33 +226,42 @@ baseChars=[
         roster.strokeStyle="black"
         if(char.echo) roster.strokeText("\uD835\uDEC6",startX+3,startY+15)
         if (showOrder) roster.strokeText(char.order,startX+defWidth-45,startY+15)
-        roster.font= " 900 "+(16+(8-xChars))+"px arial,sans-serif"
+        roster.font= defFont()
         roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
 
     }
 
     function drawTest (){
+        if(!newVisible){
+            return 0;
+        }
         document.getElementById("drawingBoard").width=defWidth
         document.getElementById("drawingBoard").height=defHeight
         drawingBoard=document.getElementById("drawingBoard").getContext("2d");
+        drawingBoard.clearRect(0,0,defWidth,defHeight)
         drawingBoard.strokeStyle="black";
         drawingBoard.fillStyle=grd
         drawingBoard.fillRect(0,0,defWidth,defHeight)
-        if (newURL) {
-            img= new Image
-            img.src=newURL
-            drawingBoard.drawImage(img,0,0,defWidth,defHeight);
+        partTwo= () => {
+            drawingBoard.rect(0,0,defWidth,defHeight)
+            drawingBoard.stroke();
+            drawingBoard.fillStyle="white"
+            textAdjust= defWidth/2 - drawingBoard.measureText(newName.toUpperCase()).width/2;
+            drawingBoard.fillText(newName.toUpperCase(),0+ textAdjust,0+(defHeight*0.9),defWidth)
+            if(newEcho) drawingBoard.fillText("\uD835\uDEC6",3,15)
+            drawingBoard.lineWidth=1;
+            drawingBoard.strokeStyle="black"
+            if(newEcho) drawingBoard.strokeText("\uD835\uDEC6",3,15)
+            drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
         }
-        drawingBoard.rect(0,0,defWidth,defHeight)
-        drawingBoard.stroke();
-        drawingBoard.fillStyle="white"
-        textAdjust= defWidth/2 - drawingBoard.measureText(newName.toUpperCase()).width/2;
-        drawingBoard.fillText(newName.toUpperCase(),0+ textAdjust,0+(defHeight*0.9),defWidth)
-        if(newEcho) drawingBoard.fillText("\uD835\uDEC6",3,15)
-        drawingBoard.lineWidth=1;
-        drawingBoard.strokeStyle="black"
-        if(newEcho) drawingBoard.strokeText("\uD835\uDEC6",3,15)
-        drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
+        if (newURL) {
+            console.log("drawing with URL: "+newURL)
+            img= new Image
+            img.addEventListener("load", function () { drawingBoard.drawImage(img,0,0,defWidth,defHeight); partTwo()});
+            img.src=newURL
+        }else{
+            partTwo();
+        }
     }
     
     function setNewName(x){
@@ -253,12 +275,21 @@ baseChars=[
         document.getElementById("newI").value=x;
         drawTest();
     }
-    function setNewEcho(x){
+    function setNewEcho(x){    
+    $("#newEcho").prop("checked", x);
         newEcho=x;
         drawTest();
     }
     $("#newEcho").change(function() {
         setNewEcho(this.checked?true:false)
+    })
+    function setNewVisible(x){
+        $("#newVisible").prop("checked", x);
+        newVisible=x;
+        drawTest();
+    }
+    $("#newVisible").change(function() {
+        setNewVisible(this.checked?true:false)
     })
 
     function setNewImage(x){
@@ -269,10 +300,24 @@ baseChars=[
         showOrder=!showOrder
         render()
     }
+    function setResolution(x,y){
+        console.log("setResolution to "+x+", "+y)
+        grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
+        roster.canvas.width=x;
+        roster.canvas.height=y;
+        grd.addColorStop(0,"yellow");
+        grd.addColorStop(1,"DodgerBlue");
+        defWidth= canvas.width/xChars;
+        defHeight= (defWidth/16)*9
+        render();
+    }
     function resetNew(){
         setNewName("");
-        setNewImage("");
+        document.getElementById("newName").value=""
+        newURL=""
+        document.getElementById("newURL").value=newURL
         setNewI(0);
         setNewEcho(false);
+        setNewVisible(true);
     }
 

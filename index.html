@@ -3,13 +3,9 @@
 <meta charset="UTF-8">
 <title>Roster Builder</title>
 <style>
-    .cropit-preview {
-    /* You can specify preview size in CSS */
-    width: 200px;
-    height: 80px;
-    }
+ 
     .cropit-preview-background {
-      opacity: .2;
+      opacity: 0.3;
     }
     
     input.cropit-image-zoom-input {
@@ -35,9 +31,26 @@
                   <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
                 </div>
         </span>
+        <span class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Clear Data</a>
+                <div id="columnDropdown" class="dropdown-menu">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DeleteChars">Clear all Characters</button>
+                </div>
+        </span>
+        <span class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Roster Resolution</a>
+                <div id="columnDropdown" class="dropdown-menu">
+                  <button id='charWidth' type="number" onclick="setResolution(1280,720)">1280x720</button>
+                  <button id='charWidth' type="number" onclick="setResolution(1366,768)">1366x768</button>
+                  <button id='charWidth' type="number" onclick="setResolution(1600,900)">1600x900</button>
+                  <button id='charWidth' type="number" onclick="setResolution(1920,1080)">1920x1080</button>
+                  <button id='charWidth' type="number" onclick="setResolution(3840,2160)">3840x2160 </button>
+                </div>
+        </span>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">Add Character</button>
         <button type="button" class="btn btn-primary" onclick="toggleOrder()">Toggle Character Numbers</button>
-    </nav>    
+    </nav>
+    
     <canvas style="float: left;" id = "canvas" width=1600 height=900>
     </canvas>
 
@@ -60,26 +73,32 @@
                             <label class="form-check-label">
                             <input type="checkbox" class="form-check-input" id="newEcho" >
                             Echo Fighter?</label>
+                            <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" id="newVisible" >
+                            Enabled</label>
                     </div>
                     <div id="my-cropper">
-                        <div style="display: flex">
-                            <div>
-                                <div class="cropit-preview"></div>
+                        <div>
+                            <div style="padding-left: 10%;padding-top: 5%">
+                                <div style="display: flex; justify-content: space-around">
+                                    <div class="cropit-preview"></div>
+                                    <canvas id="drawingBoard" width="200" height="80"></canvas>
+
+                                </div>
                                 <input type="range" class="cropit-image-zoom-input" />
                             </div>
-                            <div>
+                            <div style="display: flex; align-items: center">
                                 <div class="form-group">
                                   <label for="newURL">Select Image File</label>
-                                    <input type="file" autocomplete="off" id="newURL" class="cropit-image-input form-control-file" />
+                                    <input style="height: auto;" type="file" autocomplete="off" id="newURL" class="cropit-image-input btn form-control-file" />
                                 </div>
-                                <button class="export" onclick="setNewImage()">Set Image</button>
+                                <button class="export btn btn-primary" onclick="setNewImage()">Set Image</button>
                             </div>
                         </div>
 
 
                     </div>
                 </div>
-                <canvas id="drawingBoard" width="200" height="80"></canvas>
           </div>
           <div class="modal-footer">
             <button type="button" onclick="delChar()" id="delCharButton" class="btn btn-primary">Delete</button>
@@ -89,6 +108,25 @@
         </div>
     </div>
     </div>
+    <div class="modal fade" id="DeleteChars" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    
+                  </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" onclick="clearAll()" id="eraseChars" class="btn btn-primary">Yeah, delete all my characters</button>
+                </div>
+              </div>
+          </div>
+          </div>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
