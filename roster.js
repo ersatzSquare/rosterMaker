@@ -1,3 +1,8 @@
+if (!localStorage.myChars){
+    temp=[]
+    localStorage.myChars= JSON.stringify(temp);
+}
+
 baseChars=[
     ["Mario","1"],
     ["Donkey Kong","2"],
