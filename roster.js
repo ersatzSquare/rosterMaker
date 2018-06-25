@@ -113,7 +113,7 @@ baseChars=[
     
     function setXChars(x){
         xChars=x;
-        document.getElementById("charWidth").innerHTML=x;
+        document.getElementById("charWidth").value=x;
         render()
     }
 
@@ -191,6 +191,12 @@ baseChars=[
             })
             dropdown.appendChild(elem)
             })
+        butt=document.createElement('button')
+        butt.innerText="Clear All Characters"
+        butt.className="btn btn-primary" 
+        butt.setAttribute("data-toggle","modal") 
+        butt.setAttribute("data-target","#DeleteChars")
+        dropdown.appendChild(butt)
     }
 
 
@@ -204,8 +210,15 @@ baseChars=[
         defHeight= (defWidth/16)*9
         roster.font= defFont()
         myChars=JSON.parse(localStorage.myChars)
-        totChars=chars.concat(myChars)
-        totChars.filter(char=>char.render).sort( (a,b)=> a.order-b.order).forEach(draw)
+        totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
+        totChars.forEach((char,i,arr)=>{
+            if (char.image) {
+                img= new Image
+                img.src=char.image
+                arr[i].setImage=img
+            }
+        })
+        totChars.forEach(draw)
 
     }
     function draw (char,i){
@@ -218,9 +231,7 @@ baseChars=[
         roster.fillStyle= char.name=="RANDOM"?"#D3D3D3":grd
         roster.fillRect(startX,startY,defWidth,defHeight)
         if (char.image) {
-            img= new Image
-            img.src=char.image
-            roster.drawImage(img,startX,startY,defWidth,defHeight);
+            roster.drawImage(char.setImage,startX,startY,defWidth,defHeight);
         }
         roster.rect(startX,startY,defWidth,defHeight)
         roster.stroke();
@@ -273,6 +284,7 @@ baseChars=[
             partTwo();
         }
     }
+
     
     function setNewName(x){
         $("#addCharButton").prop("disabled", x=="")

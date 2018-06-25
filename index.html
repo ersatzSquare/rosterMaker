@@ -33,43 +33,28 @@
         </span>
         <span class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Characters per Row 
+                    Roster
                 </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                  <input id='charWidth' type="number" onchange="setXChars(this.value)">
-  
- </input>
-                </div>
-        </span>
-        <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Clear Data 
-                </a>
-                <div id="columnDropdown" class="dropdown-menu">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DeleteChars">
-                            Clear all Characters 
-                        </button>
-                </div>
-        </span>
-        <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Roster Resolution 
-                </a>
-                <div id="columnDropdown" class="dropdown-menu">
-                  <button id='charWidth' type="number" onclick="setResolution(1280,720)">1280x720</button>
-                  <button id='charWidth' type="number" onclick="setResolution(1366,768)">1366x768</button>
-                  <button id='charWidth' type="number" onclick="setResolution(1600,900)">1600x900</button>
-                  <button id='charWidth' type="number" onclick="setResolution(1920,1080)">1920x1080</button>
-                  <button id='charWidth' type="number" onclick="setResolution(3840,2160)">3840x2160 </button>
+                    <h3>Resolution</h3>  
+                    <div class="dropdown-divider"></div>
+                    <button class ="dropdown-item" onclick="setResolution(1280,720)">1280x720</button>
+                    <button class ="dropdown-item" onclick="setResolution(1600,900)">1600x900</button>
+                    <button class ="dropdown-item" onclick="setResolution(1920,1080)">1920x1080</button>
+                    <button class ="dropdown-item" onclick="setResolution(3840,2160)">3840x2160 </button>
+                    <div class="dropdown-divider"></div>
+                    <label for='charWidth'>Characters per Row</label>
+                    <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-item" onclick="toggleOrder()">Toggle Numbers</button>
                 </div>
         </span>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">
             Add Character 
         </button>
-        <button type="button" class="btn btn-primary" onclick="toggleOrder()">Toggle Character Numbers</button>
     </nav>
     
-    <canvas style="float: left;" id = "canvas" width=1600 height=900>
+    <canvas onclick="render()" id = "canvas" width=1600 height=900>
     </canvas>
 
     <div class="modal fade" id="addChar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
