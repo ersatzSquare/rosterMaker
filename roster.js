@@ -117,7 +117,15 @@ baseChars=[
         render()
     }
 
-    $("#addChar").on("show.bs.modal", x => {drawTest();$('#my-cropper').cropit({width:defWidth,height:defHeight,freeMove:true,smallImage:"allow",imageBackground:true, imageBackgroundBorderWidth: 15})} )
+    $("#addChar").on("show.bs.modal", x => {
+        drawTest();$('#my-cropper').cropit({
+            width:defWidth,
+            height:defHeight,
+            freeMove:true,
+            smallImage:"allow",
+            imageBackground:true, 
+            imageBackgroundBorderWidth: 15})
+    })
     $("#addChar").on("hide.bs.modal", x => {
         resetNew();
         $('.cropit-preview-image').removeAttr('src');
@@ -133,11 +141,9 @@ baseChars=[
         if (localStorage.myChars) {
             temp = JSON.parse(localStorage.myChars);
             old= temp.find(char=> char.name==name)
-            console.log(old) 
             aux=temp.filter( char=>char.name!=name)
             newImage= url?url:(old?old.image:"")
-            console.log("URL: "+url.substring(1,6)+" And "+((old!=undefined)?"there was":"there wasn't")+" an older version, so Image will now be:"+newImage)
-            aux.push({name:name,order:i,image: newImage, render:visible,echo:echo })
+           aux.push({name:name,order:i,image: newImage, render:visible,echo:echo })
             localStorage.myChars=JSON.stringify(aux)
         } else {
             temp = [];
@@ -171,7 +177,9 @@ baseChars=[
         }
         temp.forEach( char =>{
             elem = document.createElement('a')
-            elem.innerText=char.name
+            elem.innerHTML= "<i class='material-icons' style='vertical-align: middle;margin-right:10%'>"
+                +(char.render?"visibility":"visibility_off")+"</i>"
+                +"<span>"+char.name+"</span>"
             elem.className="dropdown-item"
             elem.onclick= (() => {
                 $("#addChar").modal({show:true})
@@ -255,9 +263,11 @@ baseChars=[
             drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
         }
         if (newURL) {
-            console.log("drawing with URL: "+newURL)
             img= new Image
-            img.addEventListener("load", function () { drawingBoard.drawImage(img,0,0,defWidth,defHeight); partTwo()});
+            img.addEventListener("load", function () { 
+                drawingBoard.drawImage(img,0,0,defWidth,defHeight); 
+                partTwo()
+            });
             img.src=newURL
         }else{
             partTwo();

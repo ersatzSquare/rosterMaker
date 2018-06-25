@@ -18,27 +18,43 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">Smash Roster Creator</span>
+        <span class="navbar-brand mb-0 h1">
+            Smash Roster Creator 
+        </span>
         <span class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Characters</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                My Characters
+            </a>
             <div id="charDropdown" class="dropdown-menu">
-              <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">
+                    Action 
+                </a>
             </div>
         </span>
         <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Characters per Row</a>
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    Characters per Row 
+                </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                  <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
+                  <input id='charWidth' type="number" onchange="setXChars(this.value)">
+  
+ </input>
                 </div>
         </span>
         <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Clear Data</a>
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    Clear Data 
+                </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DeleteChars">Clear all Characters</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DeleteChars">
+                            Clear all Characters 
+                        </button>
                 </div>
         </span>
         <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Roster Resolution</a>
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    Roster Resolution 
+                </a>
                 <div id="columnDropdown" class="dropdown-menu">
                   <button id='charWidth' type="number" onclick="setResolution(1280,720)">1280x720</button>
                   <button id='charWidth' type="number" onclick="setResolution(1366,768)">1366x768</button>
@@ -47,7 +63,9 @@
                   <button id='charWidth' type="number" onclick="setResolution(3840,2160)">3840x2160 </button>
                 </div>
         </span>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">Add Character</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">
+            Add Character 
+        </button>
         <button type="button" class="btn btn-primary" onclick="toggleOrder()">Toggle Character Numbers</button>
     </nav>
     
@@ -58,7 +76,9 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="modalLabel">Add Character</h5>
+              <h5 class="modal-title" id="modalLabel">
+                 Add Character 
+             </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,7 +110,7 @@
                             <div style="display: flex; align-items: center">
                                 <div class="form-group">
                                   <label for="newURL">Select Image File</label>
-                                    <input style="height: auto;" type="file" autocomplete="off" id="newURL" class="cropit-image-input btn form-control-file" />
+                                    <input type="file" autocomplete="off" id="newURL" class="cropit-image-input btn form-control-file" />
                                 </div>
                                 <button class="export btn btn-primary" onclick="setNewImage()">Set Image</button>
                             </div>
@@ -101,9 +121,15 @@
                 </div>
           </div>
           <div class="modal-footer">
-            <button type="button" onclick="delChar()" id="delCharButton" class="btn btn-primary">Delete</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" onclick="addChar()" id="addCharButton" class="btn btn-primary">Add</button>
+            <button type="button" onclick="delChar()" id="delCharButton" class="btn btn-primary btn-outline-danger">
+                 Delete 
+             </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                Close 
+            </button>
+            <button type="button" onclick="addChar()" id="addCharButton" class="btn btn-primary btn-outline-success">
+                Add 
+            </button>
           </div>
         </div>
     </div>
@@ -121,17 +147,31 @@
                     
                   </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" onclick="clearAll()" id="eraseChars" class="btn btn-primary">Yeah, delete all my characters</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="clearAll()" id="eraseChars" class="btn btn-outline-danger btn-primary">
+                        Yeah, delete all my characters 
+                    </button>
                 </div>
               </div>
           </div>
           </div>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropit/0.5.1/jquery.cropit.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" 
+    integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" 
+    crossorigin="anonymous">
+</script>
+<link rel="stylesheet" 
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+    integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" 
+    crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" 
+    integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" 
+    crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropit/0.5.1/jquery.cropit.js">
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <script type="text/javascript" src="./roster.js"></script>
+
 </html>
