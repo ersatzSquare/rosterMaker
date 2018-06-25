@@ -95,7 +95,7 @@ baseChars=[
     
 
     function makeChar(name,order){
-        img="http://www.smashbros.com/assets_v2/img/fighter/thumb_a/"+name.toLowerCase()
+        img="./baseImages/"+name.toLowerCase()
             .replace(".","")
             .replace(".","")
             .replace(".","")
@@ -199,13 +199,13 @@ baseChars=[
         dropdown.appendChild(butt)
     }
 
+    function defFont() {return" 900 "+defWidth/12+"px arial,sans-serif"}
 
     function render () {
         setChars();
         roster.clearRect(0,0,canvas.width,canvas.height);
         roster.beginPath();
         roster.stroke();
-        defFont=()=> " 900 "+defWidth/12+"px arial,sans-serif"
         defWidth= canvas.width/xChars;
         defHeight= (defWidth/16)*9
         roster.font= defFont()
@@ -219,7 +219,7 @@ baseChars=[
             }
         })
         totChars.forEach(draw)
-
+        document.getElementById("downloadLink").href=document.getElementById("canvas").toDataURL("image/jpeg")
     }
     function draw (char,i){
         roster.strokeStyle="black";
@@ -262,15 +262,17 @@ baseChars=[
         drawingBoard.fillStyle=grd
         drawingBoard.fillRect(0,0,defWidth,defHeight)
         partTwo= () => {
+            drawingBoard.font= defFont()
             drawingBoard.rect(0,0,defWidth,defHeight)
             drawingBoard.stroke();
-            drawingBoard.fillStyle="white"
             textAdjust= defWidth/2 - drawingBoard.measureText(newName.toUpperCase()).width/2;
+            drawingBoard.fillStyle="white"
             drawingBoard.fillText(newName.toUpperCase(),0+ textAdjust,0+(defHeight*0.9),defWidth)
             if(newEcho) drawingBoard.fillText("\uD835\uDEC6",3,15)
             drawingBoard.lineWidth=1;
             drawingBoard.strokeStyle="black"
             if(newEcho) drawingBoard.strokeText("\uD835\uDEC6",3,15)
+            drawingBoard.font= defFont()
             drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
         }
         if (newURL) {
