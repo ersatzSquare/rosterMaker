@@ -79,6 +79,7 @@ baseChars=[
     }
     roster = document.getElementById("canvas").getContext('2d');
     chars= baseChars.map(char=>makeChar.apply(this,char))        
+    myChars=[]
     totChars=[]
     xChars=9;
     j=0;
@@ -111,9 +112,22 @@ baseChars=[
             .replace(" ","_")
             .replace(" ","_")   
             +".png"
-            return {name:name,order:order,image:img,render:true,echo: order.search("ε")!=-1}
+            image = new Image();
+            image.src=img;
+            return {name:name,order:order,image:img,setImage:image,render:true,echo: order.search("ε")!=-1}
     }
     
+    function loadMyChars(){
+        myChars=JSON.parse(localStorage.myChars)
+        myChars.forEach((char,i,arr)=>{
+            if (char.image) {
+                img= new Image
+                img.src=char.image
+                arr[i].setImage=img
+            }
+        })
+    }
+
     function setXChars(x){
         xChars=x;
         document.getElementById("charWidth").value=x;
@@ -146,17 +160,19 @@ baseChars=[
             old= temp.find(char=> char.name==name)
             aux=temp.filter( char=>char.name!=name)
             newImage= url?url:(old?old.image:"")
-           aux.push({name:name,order:i,image: newImage, render:visible,echo:echo })
+            aux.push({name:name,order:i,image: newImage, render:visible,echo:echo })
             localStorage.myChars=JSON.stringify(aux)
         } else {
             temp = [];
             temp.push({name:name,order:i,image: url, render:visible,echo:echo })
             localStorage.myChars=JSON.stringify(temp)
         }
+        loadMyChars()
         resetNew();
         $("#addChar").modal("hide")
         render();
     }
+
     function delChar(){
         name=newName
         url=newURL
@@ -167,6 +183,7 @@ baseChars=[
             temp=temp.filter( char=>char.name!=name)
             localStorage.myChars=JSON.stringify(temp)
         }
+        loadMyChars()
         resetNew();
         $("#addChar").modal("hide")
         render();
@@ -211,15 +228,8 @@ baseChars=[
         roster.stroke();
         setDims()
         roster.font= defFont()
-        myChars=JSON.parse(localStorage.myChars)
+        loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
-        totChars.forEach((char,i,arr)=>{
-            if (char.image) {
-                img= new Image
-                img.src=char.image
-                arr[i].setImage=img
-            }
-        })
         totChars.forEach(draw)
     }
     function makeDownloadLinks(){
@@ -239,7 +249,7 @@ baseChars=[
         startY=Math.floor(i/xChars)*defHeight
         roster.fillStyle= char.name=="RANDOM"?"#D3D3D3":grd
         roster.fillRect(startX,startY,defWidth,defHeight)
-        if (char.image) {
+        if (char.image && char.name!="RANDOM") {
             roster.drawImage(char.setImage,startX,startY,defWidth,defHeight);
         }
         roster.rect(startX,startY,defWidth,defHeight)
@@ -248,11 +258,11 @@ baseChars=[
         textAdjust= defWidth/2 - roster.measureText(char.name.toUpperCase()).width/2;
         roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
         roster.font= " 900 "+(22+(8-xChars))+"px arial,sans-serif"
-        if(char.echo && showEchoes) roster.fillText("\uD835\uDEC6",startX+3,startY+15)
+        if(char.echo && showEchoes) roster.fillText("\u03B5",startX+3,startY+15)
         if (showOrder) roster.fillText(char.order,startX+defWidth-45,startY+15)
         roster.lineWidth=1;
         roster.strokeStyle="black"
-        if(char.echo && showEchoes) roster.strokeText("\uD835\uDEC6",startX+3,startY+15)
+        if(char.echo && showEchoes) roster.strokeText("\u03B5",startX+3,startY+15)
         if (showOrder) roster.strokeText(char.order,startX+defWidth-45,startY+15)
         roster.font= defFont()
         roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
@@ -277,10 +287,10 @@ baseChars=[
             textAdjust= defWidth/2 - drawingBoard.measureText(newName.toUpperCase()).width/2;
             drawingBoard.fillStyle="white"
             drawingBoard.fillText(newName.toUpperCase(),0+ textAdjust,0+(defHeight*0.9),defWidth)
-            if(newEcho) drawingBoard.fillText("\uD835\uDEC6",3,15)
+            if(newEcho) drawingBoard.fillText("\u03B5",3,15)
             drawingBoard.lineWidth=1;
             drawingBoard.strokeStyle="black"
-            if(newEcho) drawingBoard.strokeText("\uD835\uDEC6",3,15)
+            if(newEcho) drawingBoard.strokeText("\u03B5",3,15)
             drawingBoard.font= defFont()
             drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
         }
