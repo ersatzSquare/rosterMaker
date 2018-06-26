@@ -19,7 +19,7 @@
 <body>
     <nav class="navbar navbar-light bg-light">
         <span class="navbar-brand mb-0 h1">
-            Smash Roster Creator 
+            Smash Roster Builder 
         </span>
         <span class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -36,23 +36,34 @@
                     Roster
                 </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                    <h3>Resolution</h3>  
-                    <div class="dropdown-divider"></div>
-                    <button class ="dropdown-item" onclick="setResolution(1280,720)">1280x720</button>
-                    <button class ="dropdown-item" onclick="setResolution(1600,900)">1600x900</button>
-                    <button class ="dropdown-item" onclick="setResolution(1920,1080)">1920x1080</button>
-                    <button class ="dropdown-item" onclick="setResolution(3840,2160)">3840x2160 </button>
+                    <h3>Set Width</h3>  
+                    <label>Preset</label>
+                    <button class ="dropdown-item" onclick="setResolution(1280)">1280</button>
+                    <button class ="dropdown-item" onclick="setResolution(1600)">1600</button>
+                    <button class ="dropdown-item" onclick="setResolution(1920)">1920</button>
+                    <button class ="dropdown-item" onclick="setResolution(3840)">3840</button>
+                    <label for='customRes'>Custom Resolution</label>
+                    <input id='customRes' type="number" onchange="setResolution(this.value)"></input>
                     <div class="dropdown-divider"></div>
                     <label for='charWidth'>Characters per Row</label>
                     <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
                     <div class="dropdown-divider"></div>
                     <button type="button" class="dropdown-item" onclick="toggleOrder()">Toggle Numbers</button>
+                    <button type="button" class="dropdown-item" onclick="toggleEchoes()">Toggle Echo Symbol</button>
                 </div>
         </span>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">
             Add Character 
         </button>
-        <a id='downloadLink' class="btn btn-success" download="roster.jpg" >Download</a>
+        <span class="nav-item dropdown" style="margin-right: 2%">
+                <button class="btn btn-success dropdown-toggle"  onclick="makeDownloadLinks()" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span>Download</span>
+                </button>
+                <div id="downloadDropdown" class="dropdown-menu dropdown-menu-right">
+                    <a id='downloadLinkPNG' data-toggle="tooltip" data-placement="left" title="Has Transparency" class="dropdown-item" download="roster.png" >PNG</a>
+                    <a id='downloadLinkJPG' data-toggle="tooltip" data-placement="left" title="No Transparency" class="dropdown-item" download="roster.jpeg" >JPEG</a>
+                </div>
+            </span>
     </nav>
     
     <canvas onclick="render()" id = "canvas" width=1600 height=900>

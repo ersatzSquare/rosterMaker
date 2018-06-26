@@ -2,7 +2,9 @@ if (!localStorage.myChars){
     temp=[]
     localStorage.myChars= JSON.stringify(temp);
 }
-
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 baseChars=[
     ["Mario","1"],
     ["Donkey Kong","2"],
@@ -75,9 +77,9 @@ baseChars=[
         localStorage.myChars= JSON.stringify([]);
         render();
     }
-    
     roster = document.getElementById("canvas").getContext('2d');
     chars= baseChars.map(char=>makeChar.apply(this,char))        
+    totChars=[]
     xChars=9;
     j=0;
     newName=""
@@ -89,9 +91,10 @@ baseChars=[
     setNewName("");
     newEcho=false
     showOrder=false
+    showEchoes=true
     resetNew();
     setXChars(9);
-    setResolution(1600,900);
+    setResolution(window.innerWidth-24);
     
 
     function makeChar(name,order){
@@ -199,15 +202,14 @@ baseChars=[
         dropdown.appendChild(butt)
     }
 
-    function defFont() {return" 900 "+defWidth/12+"px arial,sans-serif"}
+    function defFont() {return" 900 "+Math.ceil(defWidth/12)+"px arial,sans-serif"}
 
     function render () {
         setChars();
         roster.clearRect(0,0,canvas.width,canvas.height);
         roster.beginPath();
         roster.stroke();
-        defWidth= canvas.width/xChars;
-        defHeight= (defWidth/16)*9
+        setDims()
         roster.font= defFont()
         myChars=JSON.parse(localStorage.myChars)
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
@@ -219,7 +221,14 @@ baseChars=[
             }
         })
         totChars.forEach(draw)
-        document.getElementById("downloadLink").href=document.getElementById("canvas").toDataURL("image/jpeg")
+    }
+    function makeDownloadLinks(){
+        jpegURL=document.getElementById("canvas").toDataURL("image/jpeg")
+        pngURL=document.getElementById("canvas").toDataURL("image/png")
+        document.getElementById("downloadLinkJPG").href=jpegURL
+        document.getElementById("downloadLinkJPG").innerText="JPEG (~"+Math.ceil(jpegURL.length/(1024*1024))+"MB)"
+        document.getElementById("downloadLinkPNG").href=pngURL
+        document.getElementById("downloadLinkPNG").innerText="PNG (~"+Math.ceil(pngURL.length/(1024*1024))+"MB)"
     }
     function draw (char,i){
         roster.strokeStyle="black";
@@ -239,11 +248,11 @@ baseChars=[
         textAdjust= defWidth/2 - roster.measureText(char.name.toUpperCase()).width/2;
         roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
         roster.font= " 900 "+(22+(8-xChars))+"px arial,sans-serif"
-        if(char.echo) roster.fillText("\uD835\uDEC6",startX+3,startY+15)
+        if(char.echo && showEchoes) roster.fillText("\uD835\uDEC6",startX+3,startY+15)
         if (showOrder) roster.fillText(char.order,startX+defWidth-45,startY+15)
         roster.lineWidth=1;
         roster.strokeStyle="black"
-        if(char.echo) roster.strokeText("\uD835\uDEC6",startX+3,startY+15)
+        if(char.echo && showEchoes) roster.strokeText("\uD835\uDEC6",startX+3,startY+15)
         if (showOrder) roster.strokeText(char.order,startX+defWidth-45,startY+15)
         roster.font= defFont()
         roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
@@ -324,15 +333,22 @@ baseChars=[
         showOrder=!showOrder
         render()
     }
-    function setResolution(x,y){
-        console.log("setResolution to "+x+", "+y)
-        grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
-        roster.canvas.width=x;
-        roster.canvas.height=y;
-        grd.addColorStop(0,"yellow");
-        grd.addColorStop(1,"DodgerBlue");
+    function toggleEchoes(){
+        showEchoes=!showEchoes
+        render()
+    }
+    function setDims(){
         defWidth= canvas.width/xChars;
         defHeight= (defWidth/16)*9
+        roster.canvas.height=defHeight*Math.ceil(totChars.length/xChars);
+        grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
+        grd.addColorStop(0,"yellow");
+        grd.addColorStop(1,"DodgerBlue");
+    }
+
+    function setResolution(x){
+        roster.canvas.width=x;
+        document.getElementById("customRes").value=x
         render();
     }
     function resetNew(){
