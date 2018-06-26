@@ -226,9 +226,9 @@ baseChars=[
         jpegURL=document.getElementById("canvas").toDataURL("image/jpeg")
         pngURL=document.getElementById("canvas").toDataURL("image/png")
         document.getElementById("downloadLinkJPG").href=jpegURL
-        document.getElementById("downloadLinkJPG").innerText="JPEG (~"+Math.ceil(jpegURL.length/(1024*1024))+"MB)"
+        document.getElementById("downloadLinkJPG").innerText="JPEG (~"+Math.ceil((jpegURL.length*0.75)/(1024*1024))+"MB)"
         document.getElementById("downloadLinkPNG").href=pngURL
-        document.getElementById("downloadLinkPNG").innerText="PNG (~"+Math.ceil(pngURL.length/(1024*1024))+"MB)"
+        document.getElementById("downloadLinkPNG").innerText="PNG (~"+Math.ceil((pngURL.length*0.75)/(1024*1024))+"MB)"
     }
     function draw (char,i){
         roster.strokeStyle="black";
@@ -347,6 +347,16 @@ baseChars=[
     }
 
     function setResolution(x){
+        if (x>2000){
+            document.getElementById("alertHolder").innerHTML=(`<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+            <strong>Downloading  the PNG</strong> at this resolution will take a while, consider using Save as Image on the canvas. 
+            <br>
+            If not, then maybe put the kettle on.
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+    </div>`)
+        }
         roster.canvas.width=x;
         document.getElementById("customRes").value=x
         render();
