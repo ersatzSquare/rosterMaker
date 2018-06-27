@@ -198,6 +198,8 @@ baseChars=[
         while (dropdown.firstChild) {
             dropdown.removeChild(dropdown.firstChild);
         }
+        hold=document.createElement("div")
+        hold.className=("characterDropdown")
         temp.forEach( char =>{
             elem = document.createElement('a')
             elem.innerHTML= "<i class='material-icons' style='vertical-align: middle;margin-right:10%'>"
@@ -212,8 +214,9 @@ baseChars=[
                 setNewEcho(char.echo)
                 setNewVisible(char.render)
             })
-            dropdown.appendChild(elem)
+            hold.appendChild(elem)
             })
+        dropdown.appendChild(hold)
         butt=document.createElement('button')
         hr=document.createElement('div')
         hr.className="dropdown-divider"
