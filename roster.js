@@ -264,14 +264,13 @@ baseChars=[
         roster.fillStyle="white"
         textAdjust= defWidth/2 - roster.measureText(char.name.toUpperCase()).width/2;
         roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
-        roster.font= " 900 "+(22+(8-xChars))+"px arial,sans-serif"
-        if(char.echo && showEchoes) roster.fillText("\u03B5",startX+3,startY+15)
-        if (showOrder) roster.fillText(char.order,startX+defWidth-45,startY+15)
+        if(char.echo && showEchoes) roster.fillText("\u03B5",startX+3,startY+defWidth/12)
+        orderWidth=roster.measureText(char.order).width
+        if (showOrder) roster.fillText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
         roster.lineWidth=1;
         roster.strokeStyle="black"
-        if(char.echo && showEchoes) roster.strokeText("\u03B5",startX+3,startY+15)
-        if (showOrder) roster.strokeText(char.order,startX+defWidth-45,startY+15)
-        roster.font= defFont()
+        if(char.echo && showEchoes) roster.strokeText("\u03B5",startX+3,startY+defWidth/12)
+        if (showOrder) roster.strokeText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
         roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
 
     }
