@@ -115,7 +115,7 @@ baseChars=[
             +".png"
             image = new Image();
             image.src=img;
-            return {name:name,order:order,image:img,setImage:image,render:true,echo: order.search("ε")!=-1}
+            return {name:name,order:(order.replace("ε",".5")),image:img,setImage:image,render:true,echo: order.search("ε")!=-1}
     }
     
     function loadMyChars(){
@@ -156,6 +156,11 @@ baseChars=[
         i=newI;
         echo=newEcho;
         visible=newVisible;
+        if (echo){
+            i=Math.floor(i)+1/2
+        }else{
+            i=Math.floor(i)
+        }
         if (localStorage.myChars) {
             temp = JSON.parse(localStorage.myChars);
             old= temp.find(char=> char.name==name)
