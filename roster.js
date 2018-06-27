@@ -93,6 +93,7 @@ baseChars=[
     newEcho=false
     showOrder=false
     showEchoes=true
+    dirtyDowns=true
     resetNew();
     setXChars(9);
     setResolution(window.innerWidth-24);
@@ -171,6 +172,7 @@ baseChars=[
         resetNew();
         $("#addChar").modal("hide")
         render();
+        dirtyDowns=true
     }
 
     function delChar(){
@@ -187,10 +189,11 @@ baseChars=[
         resetNew();
         $("#addChar").modal("hide")
         render();
+        dirtyDowns=true
     }
     
     function setChars(){
-        temp = JSON.parse(localStorage.myChars)
+        temp = JSON.parse(localStorage.myChars).sort((a,b)=> a.name==b.name?0:a.name>b.name?1:-1)
         dropdown=document.getElementById("charDropdown");
         while (dropdown.firstChild) {
             dropdown.removeChild(dropdown.firstChild);
@@ -212,10 +215,13 @@ baseChars=[
             dropdown.appendChild(elem)
             })
         butt=document.createElement('button')
-        butt.innerText="Clear All Characters"
-        butt.className="btn btn-primary" 
+        hr=document.createElement('div')
+        hr.className="dropdown-divider"
+        butt.innerText="Remove All Characters"
+        butt.className="dropdown-item eraserButton" 
         butt.setAttribute("data-toggle","modal") 
         butt.setAttribute("data-target","#DeleteChars")
+        dropdown.appendChild(hr)
         dropdown.appendChild(butt)
     }
 
@@ -232,14 +238,7 @@ baseChars=[
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
         totChars.forEach(draw)
     }
-    function makeDownloadLinks(){
-        jpegURL=document.getElementById("canvas").toDataURL("image/jpeg")
-        pngURL=document.getElementById("canvas").toDataURL("image/png")
-        document.getElementById("downloadLinkJPG").href=jpegURL
-        document.getElementById("downloadLinkJPG").innerText="JPEG (~"+Math.ceil((jpegURL.length*0.75)/(1024*1024))+"MB)"
-        document.getElementById("downloadLinkPNG").href=pngURL
-        document.getElementById("downloadLinkPNG").innerText="PNG (~"+Math.ceil((pngURL.length*0.75)/(1024*1024))+"MB)"
-    }
+
     function draw (char,i){
         roster.strokeStyle="black";
         startX=(i%xChars)*defWidth
@@ -356,20 +355,24 @@ baseChars=[
         grd.addColorStop(1,"DodgerBlue");
     }
 
-    function setResolution(x){
-        if (x>2000){
-            document.getElementById("alertHolder").innerHTML=(`<div class='alert alert-warning alert-dismissible fade show' role='alert'>
-            <strong>Downloading  the PNG</strong> at this resolution will take a while, consider using Save as Image on the canvas. 
-            <br>
-            If not, then maybe put the kettle on.
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-    </div>`)
+    function makeDownloadLinks(){
+        if (dirtyDowns){
+            console.log("Generating downloads")
+            jpegURL=document.getElementById("canvas").toDataURL("image/jpeg")
+            pngURL=document.getElementById("canvas").toDataURL("image/png")
+            document.getElementById("downloadLinkJPG").onclick=(() => download(jpegURL,"roster.jpg"))
+            document.getElementById("downloadLinkJPG").innerText="JPEG (~"+Math.ceil((jpegURL.length*0.75)/(1024*1024))+"MB)"
+            document.getElementById("downloadLinkPNG").onclick=(() => download(pngURL,"roster.png"))
+            document.getElementById("downloadLinkPNG").innerText="PNG (~"+Math.ceil((pngURL.length*0.75)/(1024*1024))+"MB)"
+            dirtyDowns=false
         }
+    }
+
+    function setResolution(x){
         roster.canvas.width=x;
         document.getElementById("customRes").value=x
         render();
+        dirtyDowns=true
     }
     function resetNew(){
         setNewName("");

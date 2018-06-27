@@ -3,7 +3,10 @@
 <meta charset="UTF-8">
 <title>Roster Builder</title>
 <style>
- 
+    .eraserButton:hover{
+        background-color: red !important;
+        color:whitesmoke !important;
+    }
     .cropit-preview-background {
       opacity: 0.3;
     }
@@ -36,16 +39,16 @@
                     Roster
                 </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                    <h3>Set Width</h3>  
-                    <label>Preset</label>
+                    <h1 class="dropdown-header">Set Width</h1>  
+                    <h3 class="dropdown-header">Preset</h3>  
                     <button class ="dropdown-item" onclick="setResolution(1280)">1280</button>
                     <button class ="dropdown-item" onclick="setResolution(1600)">1600</button>
                     <button class ="dropdown-item" onclick="setResolution(1920)">1920</button>
                     <button class ="dropdown-item" onclick="setResolution(3840)">3840</button>
-                    <label for='customRes'>Custom Resolution</label>
+                    <h3 class="dropdown-header">Custom Resolution</h3>  
                     <input id='customRes' type="number" onchange="setResolution(this.value)"></input>
                     <div class="dropdown-divider"></div>
-                    <label for='charWidth'>Characters per Row</label>
+                    <h3 class="dropdown-header">Characters per Row</h3>  
                     <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
                     <div class="dropdown-divider"></div>
                     <button type="button" class="dropdown-item" onclick="toggleOrder()">Toggle Numbers</button>
@@ -65,11 +68,10 @@
                 </div>
             </span>
     </nav>
-    <div id="alertHolder">
-
-    </div>
-    <canvas onclick="render()" id = "canvas" width=1600 height=900>
+    <canvas onclick="render()" id = "canvas" width=1600 height=900> 
+        The browser is currently not rendering the Roster, either it is not compatible with Canvas, or something has gone wrong.
     </canvas>
+
     <div class="modal fade" id="addChar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -85,9 +87,18 @@
                 <div>
                     <div class="form-group">
                             <label for="newName">Character Name</label>
-                            <input type="text" class="form-control" id="newName" autocomplete="off" oninput="setNewName(this.value)">
+                            <input type="text" 
+                                class="form-control" 
+                                id="newName" 
+                                autocomplete="off" 
+                                oninput="setNewName(this.value)"
+                            >
                             <label for="newI">Character Number</label>
-                            <input type="number" class="form-control" id="newI" autocomplete="off" oninput="setNewI(this.value)">
+                            <input type="number" class="form-control" 
+                                id="newI" 
+                                autocomplete="off" 
+                                oninput="setNewI(this.value)"
+                            >
                             <label class="form-check-label">
                             <input type="checkbox" class="form-check-input" id="newEcho" >
                             Echo Fighter?</label>
@@ -108,7 +119,10 @@
                             <div style="display: flex; align-items: center">
                                 <div class="form-group">
                                   <label for="newURL">Select Image File</label>
-                                    <input type="file" autocomplete="off" id="newURL" class="cropit-image-input btn form-control-file" />
+                                    <input type="file" 
+                                        autocomplete="off" id="newURL" 
+                                        class="cropit-image-input btn form-control-file" 
+                                    />
                                 </div>
                                 <button class="export btn btn-primary" onclick="setNewImage()">Set Image</button>
                             </div>
@@ -119,20 +133,29 @@
                 </div>
           </div>
           <div class="modal-footer">
-            <button type="button" onclick="delChar()" id="delCharButton" class="btn btn-primary btn-outline-danger">
+            <button  
+                onclick="delChar()" id="delCharButton" 
+                class="btn btn-primary btn-outline-danger"
+            >
                  Delete 
              </button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <button  class="btn btn-secondary" data-dismiss="modal">
                 Close 
             </button>
-            <button type="button" onclick="addChar()" id="addCharButton" class="btn btn-primary btn-outline-success">
+            <button 
+                onclick="addChar()" id="addCharButton" class="btn btn-primary btn-outline-success"
+            >
                 Save 
             </button>
           </div>
         </div>
     </div>
     </div>
-    <div class="modal fade" id="DeleteChars" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div 
+        class="modal fade" 
+        id="DeleteChars" tabindex="-1" role="dialog" 
+        aria-labelledby="modalLabel" aria-hidden="true"
+    >
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -146,7 +169,12 @@
                   </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="clearAll()" id="eraseChars" class="btn btn-outline-danger btn-primary">
+                    <button 
+                        type="button" 
+                        onclick="clearAll()" 
+                        id="eraseChars" 
+                        class="btn btn-outline-danger btn-primary"
+                    >
                         Yeah, delete all my characters 
                     </button>
                 </div>
@@ -154,7 +182,10 @@
           </div>
           </div>
 </body>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" 
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" 
+    crossorigin="anonymous">
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" 
     integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" 
     crossorigin="anonymous">
@@ -170,6 +201,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropit/0.5.1/jquery.cropit.js">
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js">
+</script>
 <script type="text/javascript" src="./roster.js"></script>
 
 </html>
