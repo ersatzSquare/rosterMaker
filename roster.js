@@ -263,7 +263,7 @@ baseChars=[
         dropdown.appendChild(butt)
     }
 
-    function defFont() {return" 900 "+Math.ceil(defWidth/12)+"px arial,sans-serif"}
+    function defFont(x) {return" 900 "+(Math.ceil(defWidth/12)+x)+"px arial,sans-serif"}
 
     function render () {
         setChars();
@@ -271,7 +271,7 @@ baseChars=[
         roster.beginPath();
         roster.stroke();
         setDims()
-        roster.font= defFont()
+        roster.font= defFont(0)
         loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
         console.log(grd)
@@ -306,15 +306,22 @@ baseChars=[
         roster.fillStyle="white"
         textAdjust= defWidth/2 - roster.measureText(char.name.toUpperCase()).width/2;
         char.name!="RANDOM" &&roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
-        if(char.echo && showEchoes) roster.fillText("\u03B5",startX+3,startY+defWidth/12)
+        if(char.echo && showEchoes) {
+            roster.font= defFont(14)
+            roster.fillText("\u03B5",startX+3,startY+defWidth/12+5)
+            roster.font= defFont(0)
+        }
         orderWidth=roster.measureText(char.order).width
         if (showOrder) roster.fillText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
         roster.lineWidth=1;
         roster.strokeStyle="black"
-        if(char.echo && showEchoes) roster.strokeText("\u03B5",startX+3,startY+defWidth/12)
+        if(char.echo && showEchoes){
+            roster.font= defFont(14)
+            roster.strokeText("\u03B5",startX+3,startY+defWidth/12+5)
+            roster.font= defFont(0)
+        }
         if (showOrder) roster.strokeText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
         char.name!="RANDOM" && roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
-
     }
 
     function drawTest (){
@@ -329,17 +336,25 @@ baseChars=[
         drawingBoard.fillStyle=grd
         drawingBoard.fillRect(0,0,defWidth,defHeight)
         partTwo= () => {
-            drawingBoard.font= defFont()
+            drawingBoard.font= defFont(0)
             drawingBoard.rect(0,0,defWidth,defHeight)
             drawingBoard.stroke();
             textAdjust= defWidth/2 - drawingBoard.measureText(newName.toUpperCase()).width/2;
             drawingBoard.fillStyle="white"
             drawingBoard.fillText(newName.toUpperCase(),0+ textAdjust,0+(defHeight*0.9),defWidth)
-            if(newEcho) drawingBoard.fillText("\u03B5",3,15)
+            if(newEcho) {
+                drawingBoard.font= defFont(14)
+                drawingBoard.fillText("\u03B5",3,defWidth/12+5)
+                drawingBoard.font= defFont(0)
+            }            
             drawingBoard.lineWidth=1;
             drawingBoard.strokeStyle="black"
-            if(newEcho) drawingBoard.strokeText("\u03B5",3,15)
-            drawingBoard.font= defFont()
+            if(newEcho) {
+                drawingBoard.font= defFont(14)
+                drawingBoard.strokeText("\u03B5",3,defWidth/12+5)
+                drawingBoard.font= defFont(0)
+            }
+            drawingBoard.font= defFont(0)
             drawingBoard.strokeText(newName.toUpperCase(),0+textAdjust,0+(defHeight*0.9),defWidth)
         }
         if (newURL) {
