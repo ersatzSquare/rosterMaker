@@ -64,6 +64,11 @@
                         </div>
                     <h3 class="dropdown-header">Gradient Center</h3>
                         <input type="range" min="1" max="100" id="midPointSlider" onchange="setMidPoint(this.value)">
+                    <div style="display: inline-flex; justify-content: space-around; width: 100%;">
+                            <button type="button" class="dropdown-item shorten" onclick="saveMyGradient()">Save</button>
+                            <button type="button" class="dropdown-item shorten" onclick="loadMyGradient()">Load</button>
+                            <button type="button" class="dropdown-item shorten" onclick="loadDefaultGradient()">Default</button>
+                        </div>
                     <div class="dropdown-divider"></div>
                     <h3 class="dropdown-header">Toggle Display</h3>
                     <div style="display: inline-flex; justify-content: space-around; width: 100%;">

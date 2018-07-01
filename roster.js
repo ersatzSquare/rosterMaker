@@ -92,13 +92,16 @@ baseChars=[
     setNewName("");
     newEcho=false
     showOrder=false
-    colorsOne="#9BEDDC"
-    colorsTwo="#4B88E9"
-    midPoint=0.3
+    defaultGradient={
+        one:"#9BEDDC",
+        two:"#4B88E9",
+        mid:0.3
+    }
+    gradientSettings=defaultGradient
     showEchoes=true
     dirtyDowns=true
-    setColorOne(colorsOne)
-    setColorTwo(colorsTwo)
+    setColorOne("#9BEDDC")
+    setColorTwo("#4B88E9")
     setMidPoint(30)
     resetNew();
     setXChars(9);
@@ -132,6 +135,28 @@ baseChars=[
                 arr[i].setImage=img
             }
         })
+    }
+    function setGradientUI(){
+        document.getElementById("colorOne").value=gradientSettings.one
+        document.getElementById("midPointSlider").value=Math.floor(gradientSettings.mid*100)
+        document.getElementById("colorTwo").value=gradientSettings.two
+        render()
+    }
+    function loadDefaultGradient(){
+        gradientSettings =defaultGradient
+        setGradientUI()
+    }
+    function loadMyGradient(){
+        console.log(localStorage.myGradient)
+        if(localStorage.myGradient){
+            gradientSettings=JSON.parse(localStorage.myGradient)
+            setGradientUI()
+        }else{
+            alert("You've never saved a Gradient!")
+        }
+    }
+    function saveMyGradient(){
+        localStorage.myGradient=JSON.stringify(gradientSettings)
     }
 
     function setXChars(x){
@@ -250,7 +275,18 @@ baseChars=[
         loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
         console.log(grd)
-        totChars.forEach(draw)
+        function setDraw(char,i){
+            if (char.setImage){
+                if (char.setImage.complete){
+                    draw(char,i)
+                }else{
+                    char.setImage.addEventListener("load",()=>draw(char,i))
+                }
+            }else{
+                draw(char,i)
+            }
+        }
+        totChars.forEach(setDraw)
     }
 
     function draw (char,i){
@@ -347,7 +383,7 @@ baseChars=[
         setNewVisible(this.checked?true:false)
     })
 
-    function setNewImage(x){
+    function setNewImage(){
         newURL=$('#my-cropper').cropit('export');
         drawTest();
     }
@@ -361,9 +397,9 @@ baseChars=[
     }
     function setGradient(){
         grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
-        grd.addColorStop(0,colorsOne)
-        grd.addColorStop(midPoint,colorsTwo)
-        grd.addColorStop(1,colorsOne)
+        grd.addColorStop(0,gradientSettings.one)
+        grd.addColorStop(1,gradientSettings.one)
+        grd.addColorStop(gradientSettings.mid,gradientSettings.two)
     }
     function setDims(){
         defWidth= canvas.width/xChars;
@@ -394,21 +430,21 @@ baseChars=[
         dirtyDowns=true
     }
     function setColorOne(x){
-        colorsOne=x
+        gradientSettings.one=x
         document.getElementById("colorOne").value=x
         setGradient()
         render();
         dirtyDowns=true
     }
     function setMidPoint(x){
-        midPoint= x/100
+        gradientSettings.mid= x/100
         document.getElementById("midPointSlider").value=x
         setGradient()
         render();
         dirtyDowns=true
     }
     function setColorTwo(x){
-        colorsTwo=x
+        gradientSettings.two=x
         document.getElementById("colorTwo").value=x
         setGradient()
         render();
