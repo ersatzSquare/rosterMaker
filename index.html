@@ -15,7 +15,10 @@
         max-height: 40vh;
         overflow-x: hidden;
     }
-    
+    .shorten{
+        width: auto !important;
+        padding: 0 !important;
+    }
     input.cropit-image-zoom-input {
       position: relative;
     }
@@ -44,10 +47,8 @@
                     Roster
                 </a>
                 <div id="columnDropdown" class="dropdown-menu">
-                    <h1 class="dropdown-header">Set Width</h1>  
-                    <h3 class="dropdown-header">Preset</h3>  
+                    <h1 class="dropdown-header">Set Width</h1>
                     <button class ="dropdown-item" onclick="setResolution(1280)">1280</button>
-                    <button class ="dropdown-item" onclick="setResolution(1600)">1600</button>
                     <button class ="dropdown-item" onclick="setResolution(1920)">1920</button>
                     <button class ="dropdown-item" onclick="setResolution(3840)">3840</button>
                     <h3 class="dropdown-header">Custom Resolution</h3>  
@@ -56,8 +57,19 @@
                     <h3 class="dropdown-header">Characters per Row</h3>  
                     <input id='charWidth' type="number" onchange="setXChars(this.value)"></input>
                     <div class="dropdown-divider"></div>
-                    <button type="button" class="dropdown-item" onclick="toggleOrder()">Toggle Numbers</button>
-                    <button type="button" class="dropdown-item" onclick="toggleEchoes()">Toggle Echo Symbol</button>
+                    <h3 class="dropdown-header">Gradient Colors</h3>
+                    <div style="display: inline-flex; justify-content: space-around; width: 100%;">
+                            <input type="color" id="colorOne" onchange="setColorOne(this.value)">
+                            <input type="color" id="colorTwo" onchange="setColorTwo(this.value)">
+                        </div>
+                    <h3 class="dropdown-header">Gradient Center</h3>
+                        <input type="range" min="1" max="100" id="midPointSlider" onchange="setMidPoint(this.value)">
+                    <div class="dropdown-divider"></div>
+                    <h3 class="dropdown-header">Toggle Display</h3>
+                    <div style="display: inline-flex; justify-content: space-around; width: 100%;">
+                        <button type="button" class="dropdown-item shorten" onclick="toggleOrder()">Numbers</button>
+                        <button type="button" class="dropdown-item shorten" onclick="toggleEchoes()">Echoes</button>
+                    </div>
                 </div>
         </span>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">

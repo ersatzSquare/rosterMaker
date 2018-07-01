@@ -92,12 +92,17 @@ baseChars=[
     setNewName("");
     newEcho=false
     showOrder=false
+    colorsOne="#9BEDDC"
+    colorsTwo="#4B88E9"
+    midPoint=0.3
     showEchoes=true
     dirtyDowns=true
+    setColorOne(colorsOne)
+    setColorTwo(colorsTwo)
+    setMidPoint(30)
     resetNew();
     setXChars(9);
     setResolution(window.innerWidth-24);
-    
 
     function makeChar(name,order){
         img="./baseImages/"+name.toLowerCase()
@@ -244,6 +249,7 @@ baseChars=[
         roster.font= defFont()
         loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
+        console.log(grd)
         totChars.forEach(draw)
     }
 
@@ -254,16 +260,16 @@ baseChars=[
             startX += ( defWidth * ( xChars - (totChars.length%xChars) ) ) / 2
         }
         startY=Math.floor(i/xChars)*defHeight
-        roster.fillStyle= char.name=="RANDOM"?"#D3D3D3":grd
+        roster.fillStyle=grd
         roster.fillRect(startX,startY,defWidth,defHeight)
-        if (char.image && char.name!="RANDOM") {
+        if (char.image) {
             roster.drawImage(char.setImage,startX,startY,defWidth,defHeight);
         }
         roster.rect(startX,startY,defWidth,defHeight)
         roster.stroke();
         roster.fillStyle="white"
         textAdjust= defWidth/2 - roster.measureText(char.name.toUpperCase()).width/2;
-        roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
+        char.name!="RANDOM" &&roster.fillText(char.name.toUpperCase(),startX+ textAdjust,startY+(defHeight*0.9),defWidth)
         if(char.echo && showEchoes) roster.fillText("\u03B5",startX+3,startY+defWidth/12)
         orderWidth=roster.measureText(char.order).width
         if (showOrder) roster.fillText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
@@ -271,7 +277,7 @@ baseChars=[
         roster.strokeStyle="black"
         if(char.echo && showEchoes) roster.strokeText("\u03B5",startX+3,startY+defWidth/12)
         if (showOrder) roster.strokeText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
-        roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
+        char.name!="RANDOM" && roster.strokeText(char.name.toUpperCase(),startX+textAdjust,startY+(defHeight*0.9),defWidth)
 
     }
 
@@ -353,13 +359,19 @@ baseChars=[
         showEchoes=!showEchoes
         render()
     }
+    function setGradient(){
+        grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
+        grd.addColorStop(0,colorsOne)
+        grd.addColorStop(midPoint,colorsTwo)
+        grd.addColorStop(1,colorsOne)
+    }
     function setDims(){
         defWidth= canvas.width/xChars;
         defHeight= (defWidth/16)*9
         roster.canvas.height=defHeight*Math.ceil(totChars.length/xChars);
-        grd=roster.createLinearGradient(0,0,canvas.width,canvas.height);
-        grd.addColorStop(0,"yellow");
-        grd.addColorStop(1,"DodgerBlue");
+        setGradient()
+        //grd.addColorStop(0,"yellow");
+        //grd.addColorStop(1,"DodgerBlue");
     }
 
     function makeDownloadLinks(){
@@ -378,6 +390,27 @@ baseChars=[
     function setResolution(x){
         roster.canvas.width=x;
         document.getElementById("customRes").value=x
+        render();
+        dirtyDowns=true
+    }
+    function setColorOne(x){
+        colorsOne=x
+        document.getElementById("colorOne").value=x
+        setGradient()
+        render();
+        dirtyDowns=true
+    }
+    function setMidPoint(x){
+        midPoint= x/100
+        document.getElementById("midPointSlider").value=x
+        setGradient()
+        render();
+        dirtyDowns=true
+    }
+    function setColorTwo(x){
+        colorsTwo=x
+        document.getElementById("colorTwo").value=x
+        setGradient()
         render();
         dirtyDowns=true
     }
