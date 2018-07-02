@@ -10,10 +10,23 @@
     .cropit-preview-background {
       opacity: 0.3;
     }
-    .characterDropdown {
+    .characterDropdown,.characterLoader {
         height: auto;
         max-height: 40vh;
         overflow-x: hidden;
+    }
+    .characterLoader{
+        display: flex;
+        flex-wrap: wrap;
+        width: auto;
+        justify-content: space-between
+
+    }
+    .charFlex-item{
+        width: 33% !important;
+        text-align: center !important;
+        padding-left: initial !important;
+        padding-right: initial !important;
     }
     .shorten{
         width: auto !important;
@@ -148,27 +161,19 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Are you sure?</h5>
+                    <h5 class="modal-title" id="modalLabel">Import Characters</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
                     <input type="file" id="savedFile">
-                    <div id="loadedContainer">
+                    <div id="loadedContainer" class="characterLoader">
 
                     </div>
                   </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button 
-                        type="button" 
-                        onclick="saveImported(this.value)" 
-                        id="eraseChars" 
-                        class="btn btn-outline-danger btn-primary"
-                    >
-                        Import Characters 
-                    </button>
                 </div>
               </div>
             </div>

@@ -277,7 +277,7 @@ baseChars=[
     )    
 
     function setSaved(file){
-        savedChars= JSON.parse(file)
+        savedChars= JSON.parse(file).sort((a,b)=> a.name==b.name?0:a.name>b.name?1:-1)
         hold= document.getElementById("loadedContainer")
         while (hold.firstChild) {
             hold.removeChild(hold.firstChild);
@@ -285,11 +285,10 @@ baseChars=[
         savedChars.forEach( char =>{
             elem = document.createElement('a')
             icon = document.createElement('i')
-            elem.appendChild(makeIcon(char.render))
             text=document.createElement("span")
             text.innerText= char.name
             elem.appendChild(text)
-            elem.className="dropdown-item"
+            elem.className="dropdown-item charFlex-item"
             elem.onclick= (() => {
                 $("#addChar").modal({show:true})
                 $("#newName").val(char.name)
