@@ -257,6 +257,7 @@ baseChars=[
                 $("#newName").val(char.name)
                 setNewName(char.name)
                 setNewI(char.order)
+                newURL=char.image
                 setNewEcho(char.echo)
                 setNewVisible(char.render)
             })
@@ -363,9 +364,6 @@ baseChars=[
     }
 
     function drawTest (){
-        if(!newVisible){
-            return 0;
-        }
         document.getElementById("drawingBoard").width=defWidth
         document.getElementById("drawingBoard").height=defHeight
         drawingBoard=document.getElementById("drawingBoard").getContext("2d");

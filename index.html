@@ -15,6 +15,10 @@
         max-height: 40vh;
         overflow-x: hidden;
     }
+    .dropdown-toggle{
+        text-decoration: initial !important;
+        color:black !important
+    }
     .characterLoader{
         display: flex;
         flex-wrap: wrap;
@@ -29,8 +33,13 @@
         padding-right: initial !important;
     }
     .shorten{
+        text-align: center !important;
         width: auto !important;
         padding: 0 !important;
+    }
+    .shorten-4{
+        text-align: center !important;
+        padding: 2.5% !important;
     }
     input.cropit-image-zoom-input {
       position: relative;
@@ -41,45 +50,59 @@
 </style>    
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">
-            Smash Roster Maker
-        </span>
-        <span class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                My Characters
-            </a>
-            <div  class="dropdown-menu">
-                <div id="charDropdown">
-                    <a class="dropdown-item" href="#">
-                        Action 
-                    </a>
-                </div>
+    <nav class="navbar navbar-light bg-light flex-row d-flex">
+        <span style=" display: inherit">
+            <span class="navbar-brand mb-0 h1">
+                Smash Roster Maker
+            </span>
+            <span class="nav-item dropdown">
+                <a class="nav-link btn dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class='material-icons' style='vertical-align: middle;margin-right:10%'>person</i>
+                    My Characters
+                </a>
+                <div  class="dropdown-menu">
+                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#addChar">
+                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>add</i>
+                        Add Character 
+                    </button>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" data-toggle="modal" data-target="#ImportChars">
-                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save</i>
-                        Import Characters
-                    </button>
-                    <button class="dropdown-item" onclick="downloadCharSet()" >
-                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
-                        Export Characters
-                    </button>
-                    <button class="dropdown-item eraserButton" data-toggle="modal" data-target="#DeleteChars">
-                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>delete</i>
-                        Delete All Characters
-                    </button>
+                    <div id="charDropdown">
+                        <a class="dropdown-item" href="#">
+                            Action 
+                        </a>
+                    </div>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" data-toggle="modal" data-target="#ImportChars">
+                            <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save</i>
+                            Import Characters
+                        </button>
+                        <button class="dropdown-item" onclick="downloadCharSet()" >
+                            <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
+                            Export Characters
+                        </button>
+                        <button class="dropdown-item eraserButton" data-toggle="modal" data-target="#DeleteChars">
+                            <i class='material-icons' style='vertical-align: middle;margin-right:10%'>delete</i>
+                            Delete All Characters
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </span>
+
         </span>
-        <span class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Roster
+        <span class="d-inline-flex w-25 justify-content-between">
+            <span class="nav-item dropdown">
+                <a class="nav-link btn dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>settings</i>
+                    Settings
                 </a>
                 <div id="columnDropdown" class="dropdown-menu">
                     <h1 class="dropdown-header">Set Width</h1>
-                    <button class ="dropdown-item" onclick="setResolution(1280)">1280</button>
-                    <button class ="dropdown-item" onclick="setResolution(1920)">1920</button>
-                    <button class ="dropdown-item" onclick="setResolution(3840)">3840</button>
+                    <div style="display: inline-flex; justify-content: space-around; width: 100%;">
+                        <button class ="dropdown-item shorten-4" onclick="setResolution(1280)">1280</button>
+                        <button class ="dropdown-item shorten-4" onclick="setResolution(1600)">1600</button>
+                        <button class ="dropdown-item shorten-4" onclick="setResolution(1920)">1920</button>
+                        <button class ="dropdown-item shorten-4" onclick="setResolution(3840)">3840</button>    
+                    </div>
                     <h3 class="dropdown-header">Custom Resolution</h3>  
                     <input id='customRes' type="number" onchange="setResolution(this.value)"></input>
                     <div class="dropdown-divider"></div>
@@ -105,19 +128,18 @@
                         <button type="button" class="dropdown-item shorten" onclick="toggleEchoes()">Echoes</button>
                     </div>
                 </div>
-        </span>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChar">
-            Add Character 
-        </button>
-        <span class="nav-item dropdown" style="margin-right: 2%">
-                <button class="btn btn-success dropdown-toggle"  onclick="makeDownloadLinks()" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            </span>
+            <span class="nav-item dropdown" style="margin-right: 2%">
+                <a class="btn dropdown-toggle"  onclick="makeDownloadLinks()" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
                     <span>Download</span>
-                </button>
+                </a>
                 <div id="downloadDropdown" class="dropdown-menu dropdown-menu-right">
                     <a id='downloadLinkPNG' data-toggle="tooltip" data-placement="left" title="Has Transparency" class="dropdown-item" download="roster.png" >PNG</a>
                     <a id='downloadLinkJPG' data-toggle="tooltip" data-placement="left" title="No Transparency" class="dropdown-item" download="roster.jpeg" >JPEG</a>
                 </div>
             </span>
+        </span>
     </nav>
     <canvas onclick="render()" id = "canvas" width=1600 height=900> 
         The browser is currently not rendering the Roster, either it is not compatible with Canvas, or something has gone wrong.
