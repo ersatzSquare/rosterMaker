@@ -1,7 +1,7 @@
 <html>
 <head>    
 <meta charset="UTF-8">
-<title>Roster Builder</title>
+<title>Smash Roster Maker</title>
 <style>
     .eraserButton:hover{
         background-color: red !important;
@@ -30,16 +30,32 @@
 <body>
     <nav class="navbar navbar-light bg-light">
         <span class="navbar-brand mb-0 h1">
-            Smash Roster Builder 
+            Smash Roster Maker
         </span>
         <span class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 My Characters
             </a>
-            <div id="charDropdown" class="dropdown-menu">
-                <a class="dropdown-item" href="#">
-                    Action 
-                </a>
+            <div  class="dropdown-menu">
+                <div id="charDropdown">
+                    <a class="dropdown-item" href="#">
+                        Action 
+                    </a>
+                </div>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" data-toggle="modal" data-target="#ImportChars">
+                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save</i>
+                        Import Characters
+                    </button>
+                    <button class="dropdown-item" onclick="downloadCharSet()" >
+                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
+                        Export Characters
+                    </button>
+                    <button class="dropdown-item eraserButton" data-toggle="modal" data-target="#DeleteChars">
+                        <i class='material-icons' style='vertical-align: middle;margin-right:10%'>delete</i>
+                        Delete All Characters
+                    </button>
+                </div>
             </div>
         </span>
         <span class="nav-item dropdown">
@@ -94,85 +110,6 @@
         The browser is currently not rendering the Roster, either it is not compatible with Canvas, or something has gone wrong.
     </canvas>
 
-    <div class="modal fade" id="addChar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="modalLabel">
-                 Add Character 
-             </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <div class="form-group">
-                            <label for="newName">Character Name</label>
-                            <input type="text" 
-                                class="form-control" 
-                                id="newName" 
-                                autocomplete="off" 
-                                oninput="setNewName(this.value)"
-                            >
-                            <label for="newI">Character Number</label>
-                            <input type="number" class="form-control" 
-                                id="newI" 
-                                autocomplete="off" 
-                                oninput="setNewI(this.value)"
-                            >
-                            <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" id="newEcho" >
-                            Echo Fighter?</label>
-                            <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" id="newVisible" >
-                            Enabled</label>
-                    </div>
-                    <div id="my-cropper">
-                        <div>
-                            <div style="padding-left: 10%;padding-top: 5%">
-                                <div style="display: flex; justify-content: space-around">
-                                    <div class="cropit-preview"></div>
-                                    <canvas id="drawingBoard" width="200" height="80"></canvas>
-
-                                </div>
-                                <input type="range" class="cropit-image-zoom-input" />
-                            </div>
-                            <div style="display: flex; align-items: center">
-                                <div class="form-group">
-                                  <label for="newURL">Select Image File</label>
-                                    <input type="file" 
-                                        autocomplete="off" id="newURL" 
-                                        class="cropit-image-input btn form-control-file" 
-                                    />
-                                </div>
-                                <button class="export btn btn-primary" onclick="setNewImage()">Set Image</button>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-          </div>
-          <div class="modal-footer">
-            <button  
-                onclick="delChar()" id="delCharButton" 
-                class="btn btn-primary btn-outline-danger"
-            >
-                 Delete 
-             </button>
-            <button  class="btn btn-secondary" data-dismiss="modal">
-                Close 
-            </button>
-            <button 
-                onclick="addChar()" id="addCharButton" class="btn btn-primary btn-outline-success"
-            >
-                Save 
-            </button>
-          </div>
-        </div>
-    </div>
-    </div>
     <div 
         class="modal fade" 
         id="DeleteChars" tabindex="-1" role="dialog" 
@@ -201,8 +138,119 @@
                     </button>
                 </div>
               </div>
-          </div>
-          </div>
+            </div>
+        </div>
+        <div 
+        class="modal fade" 
+        id="ImportChars" tabindex="-1" role="dialog" 
+        aria-labelledby="modalLabel" aria-hidden="true"
+    >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="file" id="savedFile">
+                    <div id="loadedContainer">
+
+                    </div>
+                  </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button 
+                        type="button" 
+                        onclick="saveImported(this.value)" 
+                        id="eraseChars" 
+                        class="btn btn-outline-danger btn-primary"
+                    >
+                        Import Characters 
+                    </button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addChar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">
+                           Add Character 
+                       </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <div>
+                              <div class="form-group">
+                                      <label for="newName">Character Name</label>
+                                      <input type="text" 
+                                          class="form-control" 
+                                          id="newName" 
+                                          autocomplete="off" 
+                                          oninput="setNewName(this.value)"
+                                      >
+                                      <label for="newI">Character Number</label>
+                                      <input type="number" class="form-control" 
+                                          id="newI" 
+                                          autocomplete="off" 
+                                          oninput="setNewI(this.value)"
+                                      >
+                                      <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input" id="newEcho" >
+                                      Echo Fighter?</label>
+                                      <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input" id="newVisible" >
+                                      Enabled</label>
+                              </div>
+                              <div id="my-cropper">
+                                  <div>
+                                      <div style="padding-left: 10%;padding-top: 5%">
+                                          <div style="display: flex; justify-content: space-around">
+                                              <div class="cropit-preview" onclick="setNewImage()" ></div>
+                                              <canvas id="drawingBoard" width="200" height="80"></canvas>
+          
+                                          </div>
+                                          <input type="range" onchange="setNewImage()" class="cropit-image-zoom-input" />
+                                      </div>
+                                      <div style="display: flex; align-items: center">
+                                          <div class="form-group">
+                                            <label for="newURL">Select Image File</label>
+                                              <input type="file" 
+                                                  autocomplete="off" id="newURL"
+                                                  class="cropit-image-input btn form-control-file" 
+                                              />
+                                          </div>
+                                      </div>
+                                  </div>
+          
+          
+                              </div>
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button  
+                          onclick="delChar()" id="delCharButton" 
+                          class="btn btn-primary btn-outline-danger"
+                      >
+                           Delete 
+                       </button>
+                      <button  class="btn btn-secondary" data-dismiss="modal">
+                          Close 
+                      </button>
+                      <button 
+                          onclick="addChar()" id="addCharButton" class="btn btn-primary btn-outline-success"
+                      >
+                          Save 
+                      </button>
+                    </div>
+                  </div>
+              </div>
+              </div>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" 
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" 

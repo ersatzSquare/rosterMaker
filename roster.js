@@ -147,7 +147,6 @@ baseChars=[
         setGradientUI()
     }
     function loadMyGradient(){
-        console.log(localStorage.myGradient)
         if(localStorage.myGradient){
             gradientSettings=JSON.parse(localStorage.myGradient)
             setGradientUI()
@@ -166,14 +165,16 @@ baseChars=[
     }
 
     $("#addChar").on("show.bs.modal", x => {
-        drawTest();$('#my-cropper').cropit({
+        $('#my-cropper').cropit({
             width:defWidth,
             height:defHeight,
             freeMove:true,
+            onImageLoaded:(()=>setNewImage()),
             smallImage:"allow",
             imageBackground:true, 
             imageBackgroundBorderWidth: 15})
-    })
+            drawTest();
+        })
     $("#addChar").on("hide.bs.modal", x => {
         resetNew();
         $('.cropit-preview-image').removeAttr('src');
@@ -227,6 +228,14 @@ baseChars=[
         dirtyDowns=true
     }
     
+    function makeIcon(visibility){    
+        ret= $.parseHTML(
+            "<i class='material-icons' style='vertical-align: middle;margin-right:10%'>"+(visibility?"visibility":"visibility_off")+"</i>",
+            document
+        )
+        return ret[0]
+    }
+
     function setChars(){
         temp = JSON.parse(localStorage.myChars).sort((a,b)=> a.name==b.name?0:a.name>b.name?1:-1)
         dropdown=document.getElementById("charDropdown");
@@ -237,9 +246,11 @@ baseChars=[
         hold.className=("characterDropdown")
         temp.forEach( char =>{
             elem = document.createElement('a')
-            elem.innerHTML= "<i class='material-icons' style='vertical-align: middle;margin-right:10%'>"
-                +(char.render?"visibility":"visibility_off")+"</i>"
-                +"<span>"+char.name+"</span>"
+            icon = document.createElement('i')
+            elem.appendChild(makeIcon(char.render))
+            text=document.createElement("span")
+            text.innerText= char.name
+            elem.appendChild(text)
             elem.className="dropdown-item"
             elem.onclick= (() => {
                 $("#addChar").modal({show:true})
@@ -252,19 +263,48 @@ baseChars=[
             hold.appendChild(elem)
             })
         dropdown.appendChild(hold)
-        butt=document.createElement('button')
-        hr=document.createElement('div')
-        hr.className="dropdown-divider"
-        butt.innerText="Remove All Characters"
-        butt.className="dropdown-item eraserButton" 
-        butt.setAttribute("data-toggle","modal") 
-        butt.setAttribute("data-target","#DeleteChars")
-        dropdown.appendChild(hr)
-        dropdown.appendChild(butt)
+        
+    }
+
+    function downloadCharSet(){
+        download(localStorage.myChars,"characters.txt")
+    }
+    document.getElementById("savedFile").addEventListener("change", ()=>{
+            reader=new FileReader()
+            reader.readAsText(document.getElementById("savedFile").files[0])
+            reader.addEventListener("load", ()=>setSaved(reader.result))
+        }
+    )    
+
+    function setSaved(file){
+        savedChars= JSON.parse(file)
+        hold= document.getElementById("loadedContainer")
+        while (hold.firstChild) {
+            hold.removeChild(hold.firstChild);
+        }
+        savedChars.forEach( char =>{
+            elem = document.createElement('a')
+            icon = document.createElement('i')
+            elem.appendChild(makeIcon(char.render))
+            text=document.createElement("span")
+            text.innerText= char.name
+            elem.appendChild(text)
+            elem.className="dropdown-item"
+            elem.onclick= (() => {
+                $("#addChar").modal({show:true})
+                $("#newName").val(char.name)
+                setNewName(char.name)
+                newURL=(char.image)
+                setNewI(char.order)
+                setNewEcho(char.echo)
+                setNewVisible(char.render)
+            })
+            hold.appendChild(elem)
+        })
     }
 
     function defFont(x) {return" 900 "+(Math.ceil(defWidth/12)+x)+"px arial,sans-serif"}
-
+    
     function render () {
         setChars();
         roster.clearRect(0,0,canvas.width,canvas.height);
@@ -274,7 +314,6 @@ baseChars=[
         roster.font= defFont(0)
         loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
-        console.log(grd)
         function setDraw(char,i){
             if (char.setImage){
                 if (char.setImage.complete){
@@ -427,7 +466,6 @@ baseChars=[
 
     function makeDownloadLinks(){
         if (dirtyDowns){
-            console.log("Generating downloads")
             jpegURL=document.getElementById("canvas").toDataURL("image/jpeg")
             pngURL=document.getElementById("canvas").toDataURL("image/png")
             document.getElementById("downloadLinkJPG").onclick=(() => download(jpegURL,"roster.jpg"))
