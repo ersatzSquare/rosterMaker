@@ -104,7 +104,9 @@ baseChars=[
     }
     gradientSettings=defaultGradient
     showEchoes=true
+    echollapse=false
     dirtyDowns=true
+    charCount=0
     setColorOne("#9BEDDC")
     setColorTwo("#4B88E9")
     setMidPoint(30)
@@ -148,7 +150,11 @@ baseChars=[
         render()
     }
     function loadDefaultGradient(){
-        gradientSettings =defaultGradient
+        gradientSettings={
+            one:"#9BEDDC",
+            two:"#4B88E9",
+            mid:0.3
+        }
         setGradientUI()
     }
     function loadMyGradient(){
@@ -312,6 +318,7 @@ baseChars=[
     
     function render () {
         setChars();
+        i=0
         roster.clearRect(0,0,canvas.width,canvas.height);
         roster.beginPath();
         roster.stroke();
@@ -319,7 +326,8 @@ baseChars=[
         roster.font= defFont(0)
         loadMyChars()
         totChars=chars.concat(myChars).filter(char=>char.render).sort( (a,b)=> a.order-b.order)
-        function setDraw(char,i){
+        charCount = echollapse?totChars.filter(c=>!c.echo).length:totChars.length
+        function setDraw(char){
             if (char.setImage){
                 if (char.setImage.complete){
                     draw(char,i)
@@ -329,15 +337,25 @@ baseChars=[
             }else{
                 draw(char,i)
             }
+            if (!(char.echo && echollapse)){
+                i++
+            }
         }
         totChars.forEach(setDraw)
     }
-
+    function getEcho(char){
+        return totChars.find( c => {
+        return c.order-char.order ==0.5
+        })
+    }
     function draw (char,i){
+        if (echollapse && char.echo){
+            return null
+        }
         roster.strokeStyle="black";
         startX=(i%xChars)*defWidth
-        if(Math.floor(i/xChars)==Math.floor(totChars.length/xChars)){
-            startX += ( defWidth * ( xChars - (totChars.length%xChars) ) ) / 2
+        if(Math.floor(i/xChars)==Math.floor(charCount/xChars)){
+            startX += ( defWidth * ( xChars - (charCount%xChars) ) ) / 2
         }
         startY=Math.floor(i/xChars)*defHeight
         roster.fillStyle=grd
@@ -355,6 +373,39 @@ baseChars=[
             roster.fillText("\u03B5",startX+3,startY+defWidth/12+5)
             roster.font= defFont(0)
         }
+        if (echollapse && !char.echo){
+            echo= getEcho(char)
+            if(echo){
+                if (echo.image) {
+                    roster.fillStyle=grd
+                    roster.fillRect(
+                        startX+defWidth*(5/8),
+                        startY,
+                        defWidth*(3/8),
+                        defHeight/2)
+                    roster.drawImage(
+                        echo.setImage,
+                        echo.setImage.width/8,
+                        0,
+                        echo.setImage.width*6/8,
+                        echo.setImage.height,
+                        startX+defWidth*(5/8),
+                        startY,
+                        defWidth*(3/8),
+                        defHeight/2
+                    );
+                    roster.rect(
+                        startX+defWidth*(5/8),
+                        startY,
+                        defWidth*(3/8),
+                        defHeight/2)
+                    roster.stroke();  
+                }else{
+                    roster.fillText(echo.name,startX+3,startY+defWidth/12+5)
+                }
+            }
+        }
+        roster.fillStyle="white"
         orderWidth=roster.measureText(char.order).width
         if (showOrder) roster.fillText(char.order,startX+defWidth-orderWidth-2,startY+defWidth/12)
         roster.lineWidth=1;
@@ -449,6 +500,10 @@ baseChars=[
     }
     function toggleEchoes(){
         showEchoes=!showEchoes
+        render()
+    }
+    function toggleEchollapse(){
+        echollapse=!echollapse
         render()
     }
     function setGradient(){
