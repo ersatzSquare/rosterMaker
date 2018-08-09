@@ -10,6 +10,7 @@ baseChars=[
     ["Donkey Kong","2"],
     ["Link","3"],
     ["Samus","4"],
+    ["Dark Samus","4ε"],
     ["Yoshi","5"],
     ["Kirby","6"],
     ["Fox","7"],
@@ -33,6 +34,7 @@ baseChars=[
     ["Ganondorf","23"],
     ["Mewtwo","24"],
     ["Roy","25"],
+    ["Chrom","25ε"],
     ["Mr. Game & Watch","26"],
     ["Meta Knight","27"],
     ["Pit","28"],
@@ -70,6 +72,9 @@ baseChars=[
     ["Bayonetta","63"],
     ["Inkling","64"],
     ["Ridley","65"],
+    ["Simon","66"],
+    ["Richter","66ε"],
+    ["King K. Rool","67"],
     ["RANDOM","999"]
     ]
 
