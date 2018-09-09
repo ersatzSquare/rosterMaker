@@ -80,6 +80,14 @@
                             <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
                             Export Characters
                         </button>
+                        <button class="dropdown-item" data-toggle="modal" data-target="#ImportOrd">
+                            <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save</i>
+                            Import Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="downloadCharOrd()" >
+                            <i class='material-icons' style='vertical-align: middle;margin-right:10%'>save_alt</i>
+                            Export Configuration
+                        </button>
                         <button class="dropdown-item eraserButton" data-toggle="modal" data-target="#DeleteChars">
                             <i class='material-icons' style='vertical-align: middle;margin-right:10%'>delete</i>
                             Delete All Characters
@@ -121,13 +129,20 @@
                             <button type="button" class="dropdown-item shorten" onclick="loadMyGradient()">Load</button>
                             <button type="button" class="dropdown-item shorten" onclick="loadDefaultGradient()">Default</button>
                         </div>
-                    <div class="dropdown-divider"></div>
-                    <button type="button" class="dropdown-item" onclick="toggleOrder()">Show Numbers</button>
-                    <h3 class="dropdown-header">Display Echo</h3>
+                        
+                    <button type="button" class="dropdown-item" onclick="toggleColor()">Complementary Colors</button>
+                    <div class="dropdown-divider"></div>                
+                    <h3 class="dropdown-header">Show</h3>
+                    <div style="display: inline-flex; justify-content: space-around; width: 100%;">
+                        <button type="button" class="dropdown-item shorten" onclick="toggleOrder()">Numbers</button>
+                        <button type="button" class="dropdown-item shorten" onclick="toggleMine()">Confirmed</button>
+                    </div>
+                    <h3 class="dropdown-header">Display Echoes With</h3>
                     <div style="display: inline-flex; justify-content: space-around; width: 100%;">
                         <button type="button" class="dropdown-item shorten" onclick="toggleEchoes()">Symbol</button>
                         <button type="button" class="dropdown-item shorten" onclick="toggleEchollapse()">Overlay</button>
                     </div>
+                    
                 </div>
             </span>
             <span class="nav-item dropdown" style="margin-right: 2%">
@@ -301,6 +316,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js">
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.0.1/color-thief.min.js">
+</script>
 <script type="text/javascript" src="./roster.js"></script>
+</script>
 
 </html>
